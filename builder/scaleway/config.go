@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/packer/helper/communicator"
 	"github.com/hashicorp/packer/packer"
 	"github.com/hashicorp/packer/packer-plugin-sdk/common"
+	packersdk "github.com/hashicorp/packer/packer-plugin-sdk/packer"
 	"github.com/hashicorp/packer/packer-plugin-sdk/template/config"
 	"github.com/hashicorp/packer/packer-plugin-sdk/template/interpolate"
 	"github.com/hashicorp/packer/packer-plugin-sdk/useragent"
@@ -191,17 +192,17 @@ func (c *Config) Prepare(raws ...interface{}) ([]string, error) {
 		c.BootType = instance.BootTypeLocal.String()
 	}
 
-	var errs *packer.MultiError
+	var errs *packersdk.MultiError
 	if es := c.Comm.Prepare(&c.ctx); len(es) > 0 {
-		errs = packer.MultiErrorAppend(errs, es...)
+		errs = packersdk.MultiErrorAppend(errs, es...)
 	}
 	if c.ProjectID == "" {
-		errs = packer.MultiErrorAppend(
+		errs = packersdk.MultiErrorAppend(
 			errs, errors.New("Scaleway Project ID must be specified"))
 	}
 
 	if c.SecretKey == "" {
-		errs = packer.MultiErrorAppend(
+		errs = packersdk.MultiErrorAppend(
 			errs, errors.New("Scaleway Secret Key must be specified"))
 	}
 
@@ -211,17 +212,17 @@ func (c *Config) Prepare(raws ...interface{}) ([]string, error) {
 	}
 
 	if c.Zone == "" {
-		errs = packer.MultiErrorAppend(
+		errs = packersdk.MultiErrorAppend(
 			errs, errors.New("Scaleway Zone is required"))
 	}
 
 	if c.CommercialType == "" {
-		errs = packer.MultiErrorAppend(
+		errs = packersdk.MultiErrorAppend(
 			errs, errors.New("commercial type is required"))
 	}
 
 	if c.Image == "" {
-		errs = packer.MultiErrorAppend(
+		errs = packersdk.MultiErrorAppend(
 			errs, errors.New("image is required"))
 	}
 
